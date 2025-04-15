@@ -1,46 +1,58 @@
 'use strict';
 
 /**
- * Implement method Sort
+ * Implement method Sort using merge sort
  */
 function applyCustomSort() {
-  // Define sort2 first
   [].__proto__.sort2 = function (compareFunction) {
     const defaultCompare = (a, b) => {
       const aStr = String(a);
       const bStr = String(b);
 
-      if (aStr < bStr) {
-        return -1;
-      } else if (aStr > bStr) {
-        return 1;
-      }
-
+      if (aStr < bStr) return -1;
+      if (aStr > bStr) return 1;
       return 0;
     };
 
     const comparator = compareFunction || defaultCompare;
-    const arr = this;
-    const len = arr.length;
+    const sorted = mergeSort(this.slice(), comparator); // use slice to avoid mutating `this` during sort
 
-    for (let i = 1; i < len; i++) {
-      const current = arr[i];
-
-      let j = i - 1;
-
-      while (j >= 0 && comparator(arr[j], current) > 0) {
-        arr[j + 1] = arr[j];
-        j--;
-      }
-
-      arr[j + 1] = current;
+    // Update original array in place
+    for (let i = 0; i < sorted.length; i++) {
+      this[i] = sorted[i];
     }
 
-    return arr;
+    return this;
   };
 
-  // Replace the original sort with your custom implementation
   [].__proto__.sort = [].__proto__.sort2;
+
+  // Merge Sort Implementation
+  function mergeSort(arr, comparator) {
+    if (arr.length <= 1) return arr;
+
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid), comparator);
+    const right = mergeSort(arr.slice(mid), comparator);
+
+    return merge(left, right, comparator);
+  }
+
+  function merge(left, right, comparator) {
+    const result = [];
+    let i = 0;
+    let j = 0;
+
+    while (i < left.length && j < right.length) {
+      if (comparator(left[i], right[j]) <= 0) {
+        result.push(left[i++]);
+      } else {
+        result.push(right[j++]);
+      }
+    }
+
+    return result.concat(left.slice(i)).concat(right.slice(j));
+  }
 }
 
 module.exports = applyCustomSort;
