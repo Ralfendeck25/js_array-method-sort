@@ -15,8 +15,7 @@ function applyCustomSort() {
     };
 
     const comparator = compareFunction || defaultCompare;
-    const sorted = mergeSort(this.slice(), comparator); // use slice to avoid mutating `this` during sort
-
+    const sorted = mergeSort(this.slice(), comparator); 
     // Update original array in place
     for (let i = 0; i < sorted.length; i++) {
       this[i] = sorted[i];
