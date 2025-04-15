@@ -4,6 +4,7 @@
  * Implement method Sort
  */
 function applyCustomSort() {
+  // Define sort2 first
   [].__proto__.sort2 = function (compareFunction) {
     const defaultCompare = (a, b) => {
       const aStr = String(a);
@@ -36,6 +37,9 @@ function applyCustomSort() {
 
     return arr;
   };
+
+  // Replace the original sort with your custom implementation
+  [].__proto__.sort = [].__proto__.sort2;
 }
 
 module.exports = applyCustomSort;
